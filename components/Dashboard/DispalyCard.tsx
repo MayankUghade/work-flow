@@ -1,20 +1,20 @@
 import { TrashIcon } from "@radix-ui/react-icons";
-import { MdOutlineEditNote } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
 import { Task } from "@prisma/client";
-import { format, formatDistanceToNow } from "date-fns"; // Import formatDistanceToNow for relative time
+import { format, formatDistanceToNow } from "date-fns";
+import EditComponent from "../EditTask";
 
 export default function DisplayCard({ data }: { data: Task }) {
   const formattedDueDate = data.dueDate
     ? format(new Date(data.dueDate), "PPPpp")
     : "No deadline";
 
-  // Convert createdAt to relative time
-  const relativeCreatedAt = formatDistanceToNow(new Date(data.createdAt), {
-    addSuffix: true,
-  });
+  const relativeCreatedAt = data.createdAt
+    ? formatDistanceToNow(new Date(data.createdAt), {
+        addSuffix: true,
+      })
+    : "No created date";
 
-  // Adjust badge color based on priority
   const badgeColor =
     {
       low: "bg-green-400",
@@ -44,7 +44,7 @@ export default function DisplayCard({ data }: { data: Task }) {
       <h1 className="text-sm">Created {relativeCreatedAt}</h1>
 
       <div className="flex items-center gap-1 mt-2">
-        <MdOutlineEditNote className="font-bold text-4xl cursor-pointer" />
+        <EditComponent data={data} />
         <TrashIcon className="font-bold text-4xl cursor-pointer" />
       </div>
     </div>
