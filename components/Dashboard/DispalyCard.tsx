@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Task } from "@prisma/client";
 import { format, formatDistanceToNow } from "date-fns";
 import EditComponent from "../EditTask";
+import DeleteTask from "./Delete";
 
 export default function DisplayCard({ data }: { data: Task }) {
   const formattedDueDate = data.dueDate
@@ -45,7 +46,7 @@ export default function DisplayCard({ data }: { data: Task }) {
 
       <div className="flex items-center gap-1 mt-2">
         <EditComponent data={data} />
-        <TrashIcon className="font-bold text-4xl cursor-pointer" />
+        <DeleteTask id={data.id} />
       </div>
     </div>
   );
