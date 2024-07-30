@@ -23,7 +23,7 @@ enum TaskStatus {
 enum Priority {
   low
   medium
-  high
+  urgent
 }
 
 model User {
@@ -85,11 +85,16 @@ model VerificationToken {
 model Task {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String?
+  description String?    @default("null")
   status      TaskStatus
   priority    Priority?
   dueDate     DateTime?
-  createdAt   DateTime   @default(now())
+  createdAt   DateTime?  @default(now())
   userEmail   String
   user        User       @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+}
+
+model something {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
 }
