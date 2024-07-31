@@ -40,7 +40,7 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { parseISO, format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { Task } from "@prisma/client";
+import { Priority, Task } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 import { CreateCompleted, CreateToDo } from "../actions";
 
@@ -68,13 +68,28 @@ export default function CreateTaskCompleted() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    CreateCompleted(values as any);
-    form.reset();
-    notify();
-    router.push("/");
-    setLoading(false);
+
+    const taskData = {
+      title: values.title,
+      description: values.description || null,
+      priority: values.priority as Priority,
+      dueDate: values.dueDate ? new Date(values.dueDate) : null,
+      createdAt: new Date(),
+    };
+
+    try {
+      await CreateCompleted(taskData as Task);
+      form.reset();
+      notify();
+      router.push("/");
+    } catch (error) {
+      toast.error("Error creating task");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <div className="flex justify-center items-centers mt-6 text-xl">

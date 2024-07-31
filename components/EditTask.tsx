@@ -84,9 +84,11 @@ export default function EditComponent({ data }: { data: Task }) {
     },
   });
 
+  type EditTaskData = Task & z.infer<typeof formSchema>;
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    await EditData(data.id, values as any);
+    await EditData(data.id, values as EditTaskData);
     form.reset();
     setLoading(false);
     AlertDialogCancel;

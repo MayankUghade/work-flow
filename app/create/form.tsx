@@ -70,24 +70,29 @@ export default function CreateTask() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    const task: Task = {
-      id: "", // You need to generate a unique ID here
+
+    const taskData = {
       title: values.title,
-      description: values.description ?? null,
+      description: values.description || null,
       status: values.status as TaskStatus,
       priority: values.priority as Priority,
       dueDate: values.dueDate ? new Date(values.dueDate) : null,
-      createdAt: null,
-      userEmail: "your-user-email",
+      createdAt: new Date(),
     };
 
-    create(task);
-    form.reset();
-    notify();
-    router.push("/");
-    setLoading(false);
+    try {
+      await create(taskData as Task);
+      form.reset();
+      notify();
+      router.push("/");
+    } catch (error) {
+      toast.error("Error creating task");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <div className="flex justify-center items-centers mt-6 text-xl">
