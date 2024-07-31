@@ -70,7 +70,7 @@ export default function CreateTaskUnderReview() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    CreateUnderReview(values as Task);
+    CreateUnderReview(values as any);
     form.reset();
     notify();
     router.push("/");

@@ -41,7 +41,7 @@ import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { parseISO, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { create } from "./actions";
-import { Task } from "@prisma/client";
+import { Priority, Task, TaskStatus } from "@prisma/client";
 import toast, { Toaster } from "react-hot-toast";
 
 const formSchema = z.object({
@@ -72,7 +72,18 @@ export default function CreateTask() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    create(values as Task);
+    const task: Task = {
+      id: "", // You need to generate a unique ID here
+      title: values.title,
+      description: values.description ?? null,
+      status: values.status as TaskStatus,
+      priority: values.priority as Priority,
+      dueDate: values.dueDate ? new Date(values.dueDate) : null,
+      createdAt: null,
+      userEmail: "your-user-email",
+    };
+
+    create(task);
     form.reset();
     notify();
     router.push("/");

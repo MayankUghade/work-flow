@@ -54,7 +54,7 @@ import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { parseISO, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import { Task } from "@prisma/client";
+import { Task, TaskStatus } from "@prisma/client";
 import { MdEdit } from "react-icons/md";
 import { EditData } from "./Actions/updatetask";
 
@@ -80,17 +80,16 @@ export default function EditComponent({ data }: { data: Task }) {
       description: data.description || "",
       status: data.status || "todo",
       priority: data.priority || "low",
-      dueDate: data.dueDate || "",
+      dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    EditData(data.id, values as Task);
-    router.push("/");
-    notify();
+    await EditData(data.id, values as any);
     form.reset();
     setLoading(false);
+    AlertDialogCancel;
   }
 
   return (
@@ -228,16 +227,16 @@ export default function EditComponent({ data }: { data: Task }) {
                               <Calendar
                                 mode="single"
                                 selected={
-                                  typeof field.value === "string"
+                                  field.value
                                     ? parseISO(field.value)
                                     : undefined
                                 }
-                                onSelect={(date) =>
-                                  field.onChange(date?.toISOString() || "")
-                                }
-                                disabled={(date) =>
-                                  date <= new Date(Date.now())
-                                }
+                                onSelect={(date) => {
+                                  field.onChange(
+                                    date ? date.toISOString() : ""
+                                  );
+                                }}
+                                disabled={(date) => date <= new Date()}
                                 initialFocus
                               />
                             </PopoverContent>

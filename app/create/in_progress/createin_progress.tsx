@@ -70,7 +70,7 @@ export default function CreateTaskInProgress() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    CreateInProgress(values as Task);
+    CreateInProgress(values as any);
     form.reset();
     notify();
     router.push("/");

@@ -89,7 +89,7 @@ model Task {
   status      TaskStatus
   priority    Priority?
   dueDate     DateTime?
-  createdAt   DateTime?  @default(now())
+  createdAt   DateTime?
   userEmail   String
   user        User       @relation(fields: [userEmail], references: [email], onDelete: Cascade)
 }

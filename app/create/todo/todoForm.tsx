@@ -70,7 +70,7 @@ export default function CreateTaskToDo() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    CreateToDo(values as Task);
+    CreateToDo(values as any);
     form.reset();
     notify();
     router.push("/");

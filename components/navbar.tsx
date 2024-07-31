@@ -2,9 +2,12 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div className="mt-3 border-b">
       <div className="lg:container p-3 flex items-start justify-between mb-2">
@@ -14,7 +17,12 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button onClick={() => signIn()}>Login</Button>
+          {session ? (
+            <Button onClick={() => signOut()}>Sign-out</Button>
+          ) : (
+            <Button onClick={() => signIn()}>Login</Button>
+          )}
+
           <ModeToggle />
         </div>
       </div>

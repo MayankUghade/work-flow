@@ -70,7 +70,7 @@ export default function CreateTaskCompleted() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    CreateCompleted(values as Task);
+    CreateCompleted(values as any);
     form.reset();
     notify();
     router.push("/");
